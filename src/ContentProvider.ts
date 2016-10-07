@@ -29,9 +29,13 @@ export default class DescriptionContent implements vscode.TextDocumentContentPro
         //console.log('DescriptionContent', DescriptionContent._response);
         const res = DescriptionContent._response;
         let description = marked.parse(res.description);
-        description = '<h1>Description</h1><br/>'.concat(style.concat(description))
+        description = '<br/><h1>Description</h1><br/>'.concat(style.concat(description))
         description = description.concat(`<div><h3>Tags</h3><pre><code>${res.tags.join(', ')}</code></pre></div>`);
 
         return description;
+    }
+
+    public dispose() {
+        console.log('dispose');
     }
 }

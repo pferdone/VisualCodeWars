@@ -21,6 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function peekNextCodeChallenge() {
+
     const quickPicks = [
         {
             label: 'default',
@@ -125,7 +126,7 @@ export function getNextChallenge(strategy: string) {
         },
         formData: {
             'strategy': strategy,
-            'peek': 'peek',
+            'peek': 'true',
         },
     };
 
@@ -134,8 +135,9 @@ export function getNextChallenge(strategy: string) {
             let json: CwResponse = JSON.parse(body);
             console.log(json);
             DescriptionContent.setResponse(json);
-            let challenge = vscode.Uri.parse('vcw-desc://challenge');
-            vscode.commands.executeCommand('vscode.previewHtml', challenge, vscode.ViewColumn.Two, json.name+json.rank);
+            let challenge = vscode.Uri.parse(`vcw-desc://${json.slug}`);
+            vscode.commands.executeCommand('vscode.previewHtml',
+                challenge, vscode.ViewColumn.Two, `${json.name} (kyu${json.rank})`);
         } else {
             console.log(error);
         }
