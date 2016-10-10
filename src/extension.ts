@@ -28,14 +28,10 @@ export function peekNextCodeChallenge() {
             const request:request.Request = CodeWarsClient.trainNextCodeChallenge(value.label, true);
             let json: string = '';
             request
-                .on('data', (data) => {
-                    json += data;
-                })
+                .on('data', (data) => { json += data; })
                 .on('complete', (response, body) => {
                     let tccr: CwTrainCodeChallengeResponse = JSON.parse(json);
-                    DescriptionContent.setResponse(tccr);
-                    let challenge = vscode.Uri.parse(`vcw-desc://${tccr.slug}`);
-                    vscode.commands.executeCommand('vscode.previewHtml', challenge, vscode.ViewColumn.Two, `${tccr.name}`);
+                    previewDescription(tccr);
                 })
                 .on('error', (e) => {
                     vscode.window.showInformationMessage('No challenge available for selected options!');
@@ -58,14 +54,10 @@ export function trainSpecificChallenge() {
             const request:request.Request = CodeWarsClient.trainCodeChallenge(value);
             let json: string = '';
             request
-                .on('data', (data) => {
-                    json += data;
-                })
+                .on('data', (data) => { json += data; })
                 .on('complete', (response, body) => {
                     let tccr: CwTrainCodeChallengeResponse = JSON.parse(json);
-                    DescriptionContent.setResponse(tccr);
-                    let challenge = vscode.Uri.parse(`vcw-desc://${tccr.slug}`);
-                    vscode.commands.executeCommand('vscode.previewHtml', challenge, vscode.ViewColumn.Two, `${tccr.name}`);
+                    previewDescription(tccr);
                 })
                 .on('error', (e) => {
                     vscode.window.showInformationMessage('No such challenge available!');
@@ -73,6 +65,12 @@ export function trainSpecificChallenge() {
         }, (reason: any) => {
             console.log(reason);
         });
+}
+
+export function previewDescription(tccr: CwTrainCodeChallengeResponse): void {
+    DescriptionContent.setResponse(tccr);
+    let challenge = vscode.Uri.parse(`vcw-desc://${tccr.slug}`);
+    vscode.commands.executeCommand('vscode.previewHtml', challenge, vscode.ViewColumn.Two, `${tccr.name}`);
 }
 
 // this method is called when your extension is deactivated
