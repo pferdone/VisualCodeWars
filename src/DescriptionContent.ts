@@ -21,7 +21,7 @@ export default class DescriptionContent implements vscode.TextDocumentContentPro
         let description = marked.parse(response.description);
         const url = CW_BASE_URL+response.href;
         description = '<br/><h1>Description</h1><br/>'.concat(style.concat(description));
-        description = `<br/><a href="${url}">${url}</a><br/>`.concat(style.concat(description));
+        description = response.href ? `<br/><a href="${url}">${url}</a><br/>`.concat(style.concat(description)) : description;
         description = description.concat(`<div><h3>Tags</h3><pre><code>${response.tags.join(', ')}</code></pre></div>`);
 
         return description;
